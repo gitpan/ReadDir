@@ -1,4 +1,4 @@
-ReadDir version 0.01
+ReadDir version 0.02
 ====================
 
 ReadDir gives you a `readdir_inode' function, which is much like
