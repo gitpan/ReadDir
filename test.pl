@@ -10,7 +10,7 @@
 use Test;
 
 BEGIN {
-    plan tests => 8
+    plan tests => 9
 };
 use ReadDir qw(&readdir_inode &readdir_arrayref &readdir_hashref);
 
@@ -94,3 +94,28 @@ sub ish {
 	ok($ok);
     }
 }
+
+use ReadDir qw(&readdir_inode);
+
+# As reported by Sergey Goldgaber, directories with lots of entries
+# can cause segfaults.
+our $num_tempfiles = $ENV{NUM_TEMP} || 256;
+
+my $dir = "tmp";
+
+mkdir($dir);
+for ( $i=0 ; $i<$num_tempfiles ; $i++ ) {
+   open TOUCH, ">$dir/$i" or die "failed to create $dir/$i; $!";
+}
+close TOUCH;
+
+my @dirents = readdir_inode $dir;
+for ( $i=0 ; $i<$num_tempfiles ; $i++ ) {
+   unlink "$dir/$i" or die "failed to unlink $dir/$i; $!";
+}
+rmdir("$dir");
+my @dirents = readdir_inode $dir;
+
+#print STDERR "dents are: ".@dirents."\n";
+is(@dirents, $num_tempfiles + 2);
+

@@ -24,7 +24,7 @@ PPCODE:
       record[0] = newSVpv(ent->d_name, 0);
       record[1] = newSViv((IV)ent->d_ino);
       record[2] = newSViv((IV)ent->d_type);
-      PUSHs(sv_2mortal(newRV_noinc((SV*)av_make(3, record))));
+      XPUSHs(sv_2mortal(newRV_noinc((SV*)av_make(3, record))));
       SvREFCNT_dec(record[0]);
       SvREFCNT_dec(record[1]);
     }

@@ -18,7 +18,7 @@ BEGIN {
 
     @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
-    $VERSION = '0.02';
+    $VERSION = '0.03';
 };
 
 # contact me if you need this as a complete XS routine, I'm just being
@@ -52,9 +52,11 @@ returned as well.
 
 So, the example in the synopsis is a quick `C<ls -i>'.
 
-This will save you a `stat' in certain situations.  I didn't implement
-the whole opendir/readdir/closedir stuff, because that's a bunch of
-arse.
+This will save you a `stat' in certain situations.
+
+I didn't implement the whole opendir/readdir/closedir system, because
+I think that's an overcomplication; but see L<IO::Dirent> for a
+replacement of the readdir() function that works with opendir.
 
 =head1 FUNCTIONS
 
@@ -100,9 +102,9 @@ the inode number of the B<underlying directory>, not the root inode of
 the mounted filesystem.  This behaviour may or may not vary between
 systems.
 
-This may not be a very portable function, either.  It works on Linux,
-Solaris, and I've heard FreeBSD.  It's unlikely to work on Win32,
-where the file name and the file are inseperably tied.
+This may not be a very portable function, either.  It works on at
+least Linux, Solaris, and FreeBSD.  It does not return anything useful
+on Windows based platforms.
 
 Remember, the operating system keeps its own cache of directory
 entries.  Consider whether or not you are just adding to complete
@@ -117,7 +119,8 @@ providing readdir_hashref!
 
 =head1 SEE ALSO
 
-L<perlfunc>.
+L<perlfunc>.  IO::Dirent provides an alternate approach to the same
+thing that
 
 =cut
 
